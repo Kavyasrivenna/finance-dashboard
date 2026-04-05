@@ -6,17 +6,20 @@ import { Select } from '../ui/Select';
 import { Button } from '../ui/Button';
 import { formatCurrency } from '../../utils/formatCurrency';
 import { format, parseISO } from 'date-fns';
-import { Pencil, Trash2, Search, ArrowUpDown, Inbox } from 'lucide-react';
+import { Pencil, Trash2, Search, ArrowUpDown } from 'lucide-react';
 import type { Transaction } from '../../types';
 import { Modal } from '../ui/Modal';
 import { TransactionForm } from './TransactionForm';
 import { motion, AnimatePresence } from 'framer-motion';
+import toast from 'react-hot-toast';
 
 export const TransactionsList = () => {
   const { transactions, userRole, deleteTransaction } = useFinanceStore();
 
   const [search, setSearch] = useState('');
   const [filterType, setFilterType] = useState('All');
+  const [dateFilter, setDateFilter] = useState('All');
+
   const [sortBy, setSortBy] = useState<'date' | 'amount'>('date');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
 
@@ -28,25 +31,50 @@ export const TransactionsList = () => {
       const matchesSearch =
         t.description.toLowerCase().includes(search.toLowerCase()) ||
         t.category.toLowerCase().includes(search.toLowerCase());
+
       const matchesType = filterType === 'All' || t.type === filterType;
-      return matchesSearch && matchesType;
+
+      const now = new Date();
+      const transactionDate = new Date(t.date);
+
+      let matchesDate = true;
+
+      if (dateFilter === '7days') {
+        const last7 = new Date();
+        last7.setDate(now.getDate() - 7);
+        matchesDate = transactionDate >= last7;
+      }
+
+      if (dateFilter === '30days') {
+        const last30 = new Date();
+        last30.setDate(now.getDate() - 30);
+        matchesDate = transactionDate >= last30;
+      }
+
+      if (dateFilter === 'month') {
+        matchesDate =
+          transactionDate.getMonth() === now.getMonth() &&
+          transactionDate.getFullYear() === now.getFullYear();
+      }
+
+      return matchesSearch && matchesType && matchesDate;
     });
 
     result.sort((a, b) => {
       if (sortBy === 'date') {
-        const valA = new Date(a.date).getTime();
-        const valB = new Date(b.date).getTime();
-        return sortOrder === 'asc' ? valA - valB : valB - valA;
+        return sortOrder === 'asc'
+          ? new Date(a.date).getTime() - new Date(b.date).getTime()
+          : new Date(b.date).getTime() - new Date(a.date).getTime();
       }
       return sortOrder === 'asc' ? a.amount - b.amount : b.amount - a.amount;
     });
 
     return result;
-  }, [transactions, search, filterType, sortBy, sortOrder]);
+  }, [transactions, search, filterType, dateFilter, sortBy, sortOrder]);
 
   const toggleSort = (field: 'date' | 'amount') => {
     if (sortBy === field) {
-      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+      setSortOrder(prev => (prev === 'asc' ? 'desc' : 'asc'));
     } else {
       setSortBy(field);
       setSortOrder('desc');
@@ -63,34 +91,13 @@ export const TransactionsList = () => {
     setIsModalOpen(false);
   };
 
-  const exportCSV = () => {
-    const headers = ['Date', 'Description', 'Category', 'Type', 'Amount'];
-    const rows = filteredAndSorted.map(t => [
-      t.date,
-      t.description,
-      t.category,
-      t.type,
-      t.amount
-    ]);
-
-    const csv = [headers, ...rows].map(r => r.join(',')).join('\n');
-
-    const blob = new Blob([csv], { type: 'text/csv' });
-    const url = URL.createObjectURL(blob);
-
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'transactions.csv';
-    a.click();
-  };
-
   return (
     <Card>
       <CardHeader className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <CardTitle>Recent Transactions</CardTitle>
 
         <div className="flex gap-2">
-          <Button variant="secondary" onClick={exportCSV}>
+          <Button variant="secondary">
             Export CSV
           </Button>
 
@@ -103,7 +110,10 @@ export const TransactionsList = () => {
       </CardHeader>
 
       <CardContent>
+
+        {/* FILTER BAR */}
         <div className="flex flex-col md:flex-row gap-4 mb-6">
+
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
@@ -124,23 +134,33 @@ export const TransactionsList = () => {
               { label: 'Expense', value: 'Expense' }
             ]}
           />
+
+          <Select
+            className="md:w-[160px]"
+            value={dateFilter}
+            onChange={(e) => setDateFilter(e.target.value)}
+            options={[
+              { label: 'All Time', value: 'All' },
+              { label: 'Last 7 Days', value: '7days' },
+              { label: 'Last 30 Days', value: '30days' },
+              { label: 'This Month', value: 'month' }
+            ]}
+          />
+
         </div>
 
-        <div className="overflow-x-auto scrollbar-thin">
+        {/* TABLE */}
+        <div className="overflow-x-auto">
           <table className="w-full text-sm text-left">
             <thead className="text-xs text-muted-foreground uppercase bg-muted/50">
               <tr>
-                <th className="px-4 py-3 cursor-pointer hover:text-text" onClick={() => toggleSort('date')}>
-                  <div className="flex items-center gap-1">
-                    Date <ArrowUpDown className="h-3 w-3" />
-                  </div>
+                <th className="px-4 py-3 cursor-pointer" onClick={() => toggleSort('date')}>
+                  Date <ArrowUpDown className="inline h-3 w-3" />
                 </th>
                 <th className="px-4 py-3">Description</th>
                 <th className="px-4 py-3">Category</th>
-                <th className="px-4 py-3 cursor-pointer hover:text-text" onClick={() => toggleSort('amount')}>
-                  <div className="flex items-center gap-1">
-                    Amount <ArrowUpDown className="h-3 w-3" />
-                  </div>
+                <th className="px-4 py-3 cursor-pointer" onClick={() => toggleSort('amount')}>
+                  Amount <ArrowUpDown className="inline h-3 w-3" />
                 </th>
                 {userRole === 'Admin' && <th className="px-4 py-3 text-right">Actions</th>}
               </tr>
@@ -148,64 +168,59 @@ export const TransactionsList = () => {
 
             <tbody>
               <AnimatePresence>
-                {filteredAndSorted.length === 0 && (
-                  <tr>
-                    <td colSpan={5} className="px-4 py-16 text-center">
-                      <div className="flex flex-col items-center justify-center text-muted-foreground">
-                        <Inbox className="h-10 w-10 mb-3 text-muted-foreground/50" />
-                        <p className="text-lg font-medium text-text">No transactions found</p>
-                        <p className="text-sm mt-1">Try adjusting filters or add a new transaction.</p>
-                      </div>
-                    </td>
-                  </tr>
-                )}
-
                 {filteredAndSorted.map((transaction) => (
                   <motion.tr
                     key={transaction.id}
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, x: -10 }}
-                    className="border-b border-border hover:bg-muted/30 transition-colors"
+                    className="border-b border-border hover:bg-muted/30 transition"
                   >
-                    <td className="px-4 py-3 whitespace-nowrap text-text">
+                    <td className="px-4 py-3">
                       {format(parseISO(transaction.date), 'MMM dd, yyyy')}
                     </td>
-                    <td className="px-4 py-3 font-medium text-text">
-                      {transaction.description}
-                    </td>
-                    <td className="px-4 py-3 text-muted-foreground">
-                      <span className="bg-muted px-2 py-1 rounded-md text-xs">
-                        {transaction.category}
-                      </span>
-                    </td>
-                    <td className={`px-4 py-3 font-semibold ${transaction.type === 'Income' ? 'text-green-500' : 'text-red-400'}`}>
-                      {transaction.type === 'Income' ? '+' : '-'}{formatCurrency(transaction.amount)}
+                    <td className="px-4 py-3">{transaction.description}</td>
+                    <td className="px-4 py-3">{transaction.category}</td>
+                    <td className={`px-4 py-3 font-semibold ${
+                      transaction.type === 'Income' ? 'text-green-500' : 'text-red-400'
+                    }`}>
+                      {transaction.type === 'Income' ? '+' : '-'}
+                      {formatCurrency(transaction.amount)}
                     </td>
 
                     {userRole === 'Admin' && (
                       <td className="px-4 py-3 text-right">
-                        <div className="flex items-center justify-end gap-2">
-                          <Button variant="ghost" size="sm" onClick={() => handleEdit(transaction)} className="h-8 w-8 p-0">
+                        <div className="flex justify-end gap-2">
+
+                          <button
+                            onClick={() => handleEdit(transaction)}
+                            className="p-2 rounded-lg bg-blue-500/10 hover:bg-blue-500/20 text-blue-500"
+                          >
                             <Pencil className="h-4 w-4" />
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => deleteTransaction(transaction.id)}
-                            className="h-8 w-8 p-0 text-danger hover:text-danger hover:bg-danger/10"
+                          </button>
+
+                          <button
+                            onClick={() => {
+                              if (confirm('Delete this transaction?')) {
+                                deleteTransaction(transaction.id);
+                                toast.success('Deleted successfully');
+                              }
+                            }}
+                            className="p-2 rounded-lg bg-red-500/10 hover:bg-red-500/20 text-red-500"
                           >
                             <Trash2 className="h-4 w-4" />
-                          </Button>
+                          </button>
+
                         </div>
                       </td>
                     )}
+
                   </motion.tr>
                 ))}
               </AnimatePresence>
             </tbody>
           </table>
         </div>
+
       </CardContent>
 
       <Modal

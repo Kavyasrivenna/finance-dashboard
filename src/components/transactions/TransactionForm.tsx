@@ -4,6 +4,7 @@ import type { Transaction } from '../../types';
 import { Input } from '../ui/Input';
 import { Select } from '../ui/Select';
 import { Button } from '../ui/Button';
+import toast from 'react-hot-toast';
 
 interface TransactionFormProps {
   onSuccess: () => void;
@@ -41,8 +42,10 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ onSuccess, ini
 
     if (initialData) {
       updateTransaction(initialData.id, payload);
+      toast.success('Transaction updated!');
     } else {
       addTransaction(payload);
+      toast.success('Transaction added!');
     }
 
     onSuccess();
@@ -50,6 +53,7 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ onSuccess, ini
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
+
       <div>
         <label className="block text-sm font-medium text-text mb-1">Description</label>
         <Input
@@ -67,13 +71,12 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ onSuccess, ini
           <Input
             required
             type="number"
-            step="0.01"
             name="amount"
             value={formData.amount}
             onChange={handleChange}
-            placeholder="0.00"
           />
         </div>
+
         <div>
           <label className="block text-sm font-medium text-text mb-1">Date</label>
           <Input
@@ -87,28 +90,21 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ onSuccess, ini
       </div>
 
       <div className="grid grid-cols-2 gap-4">
-        <div>
-          <label className="block text-sm font-medium text-text mb-1">Type</label>
-          <Select
-            name="type"
-            value={formData.type}
-            onChange={handleChange}
-            options={[
-              { label: 'Expense', value: 'Expense' },
-              { label: 'Income', value: 'Income' }
-            ]}
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-text mb-1">Category</label>
-          <Input
-            required
-            name="category"
-            value={formData.category}
-            onChange={handleChange}
-            placeholder="e.g. Food, Salary..."
-          />
-        </div>
+        <Select
+          name="type"
+          value={formData.type}
+          onChange={handleChange}
+          options={[
+            { label: 'Expense', value: 'Expense' },
+            { label: 'Income', value: 'Income' }
+          ]}
+        />
+
+        <Input
+          name="category"
+          value={formData.category}
+          onChange={handleChange}
+        />
       </div>
 
       <div className="flex justify-end pt-4">
@@ -116,6 +112,7 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ onSuccess, ini
           {initialData ? 'Save Changes' : 'Add Transaction'}
         </Button>
       </div>
+
     </form>
   );
 };

@@ -9,19 +9,30 @@ import {
   Legend
 } from 'chart.js';
 import { formatCurrency } from '../../utils/formatCurrency';
+import { motion } from 'framer-motion';
+import { parseISO } from 'date-fns';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const COLORS = ['#4f46e5', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899', '#64748b'];
 
-export const SpendingChart = () => {
+export const SpendingChart = ({ filter }: { filter: 'weekly' | 'monthly' }) => {
   const transactions = useFinanceStore((state) => state.transactions);
   const darkMode = useFinanceStore((state) => state.darkMode);
 
   const { labels, dataPoints, topCategory } = useMemo(() => {
     const expenses = transactions.filter(t => t.type === 'Expense');
 
-    const categoryTotals = expenses.reduce((acc, curr) => {
+    const sortedByDate = [...expenses].sort(
+      (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
+    );
+
+    const filtered =
+      filter === 'weekly'
+        ? sortedByDate.slice(-7)
+        : sortedByDate;
+
+    const categoryTotals = filtered.reduce((acc, curr) => {
       acc[curr.category] = (acc[curr.category] || 0) + curr.amount;
       return acc;
     }, {} as Record<string, number>);
@@ -35,7 +46,7 @@ export const SpendingChart = () => {
       dataPoints: sorted.map(i => i.value),
       topCategory: sorted.length ? sorted[0] : null
     };
-  }, [transactions]);
+  }, [transactions, filter]);
 
   const textColor = darkMode ? '#e2e8f0' : '#0f172a';
   const gridColor = darkMode ? '#334155' : '#e2e8f0';
@@ -82,29 +93,36 @@ export const SpendingChart = () => {
   };
 
   return (
-    <Card className="col-span-full md:col-span-1">
-      <CardHeader>
-        <CardTitle className="flex items-center justify-between">
-          Spending by Category
-          {topCategory && (
-            <span className="text-xs text-muted-foreground">
-              Top: {topCategory.name}
-            </span>
-          )}
-        </CardTitle>
-      </CardHeader>
+    <motion.div
+      initial={{ opacity: 0, y: 40 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6 }}
+      className="w-full"
+    >
+      <Card className="w-full">
+        <CardHeader>
+          <CardTitle className="flex items-center justify-between">
+            Spending by Category
+            {topCategory && (
+              <span className="text-xs text-muted-foreground">
+                Top: {topCategory.name}
+              </span>
+            )}
+          </CardTitle>
+        </CardHeader>
 
-      <CardContent>
-        <div className="h-[300px] w-full">
-          {dataPoints.length > 0 ? (
-            <Doughnut data={chartData} options={options} />
-          ) : (
-            <div className="h-full flex items-center justify-center text-muted-foreground">
-              No expenses to show.
-            </div>
-          )}
-        </div>
-      </CardContent>
-    </Card>
+        <CardContent>
+          <div className="h-[300px] w-full">
+            {dataPoints.length > 0 ? (
+              <Doughnut data={chartData} options={options} />
+            ) : (
+              <div className="h-full flex items-center justify-center text-muted-foreground">
+                No expenses to show.
+              </div>
+            )}
+          </div>
+        </CardContent>
+      </Card>
+    </motion.div>
   );
 };

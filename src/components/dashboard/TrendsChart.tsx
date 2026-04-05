@@ -15,6 +15,7 @@ import {
 } from 'chart.js';
 import { format, parseISO } from 'date-fns';
 import { formatCurrency } from '../../utils/formatCurrency';
+import { motion } from 'framer-motion';
 
 ChartJS.register(
   CategoryScale,
@@ -27,7 +28,7 @@ ChartJS.register(
   Legend
 );
 
-export const TrendsChart = () => {
+export const TrendsChart = ({ filter }: { filter: 'weekly' | 'monthly' }) => {
   const transactions = useFinanceStore((state) => state.transactions);
   const darkMode = useFinanceStore((state) => state.darkMode);
 
@@ -54,12 +55,17 @@ export const TrendsChart = () => {
       return acc;
     }, [] as { date: string; balance: number }[]);
 
+    const filtered =
+      filter === 'weekly'
+        ? dailyData.slice(-7)
+        : dailyData;
+
     return {
-      labels: dailyData.map(d => d.date),
-      dataPoints: dailyData.map(d => d.balance),
-      lastValue: dailyData.length ? dailyData[dailyData.length - 1].balance : 0
+      labels: filtered.map(d => d.date),
+      dataPoints: filtered.map(d => d.balance),
+      lastValue: filtered.length ? filtered[filtered.length - 1].balance : 0
     };
-  }, [transactions]);
+  }, [transactions, filter]);
 
   const textColor = darkMode ? '#e2e8f0' : '#0f172a';
   const gridColor = darkMode ? '#334155' : '#e2e8f0';
@@ -125,20 +131,27 @@ export const TrendsChart = () => {
   };
 
   return (
-    <Card className="col-span-full md:col-span-2">
-      <CardHeader>
-        <CardTitle className="flex items-center justify-between">
-          Balance Trend
-          <span className="text-sm font-medium text-muted-foreground">
-            Current: {formatCurrency(lastValue)}
-          </span>
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div className="h-[300px] w-full">
-          <Line data={chartData} options={options} />
-        </div>
-      </CardContent>
-    </Card>
+    <motion.div
+      initial={{ opacity: 0, y: 40 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6 }}
+      className="w-full"
+    >
+      <Card className="w-full">
+        <CardHeader>
+          <CardTitle className="flex items-center justify-between">
+            Balance Trend
+            <span className="text-sm font-medium text-muted-foreground">
+              Current: {formatCurrency(lastValue)}
+            </span>
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="h-[300px] w-full">
+            <Line data={chartData} options={options} />
+          </div>
+        </CardContent>
+      </Card>
+    </motion.div>
   );
 };
