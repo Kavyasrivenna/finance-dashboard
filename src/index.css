@@ -1,0 +1,35 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 98%;
+    --card: 0 0% 100%;
+    --text: 240 10% 4%;
+    --muted: 240 5% 96%;
+    --border: 240 6% 90%;
+    --primary: 238 80% 60%;
+    --primary-hover: 238 80% 55%;
+    --success: 142.1 76.2% 36.3%;
+    --danger: 346.8 77.2% 49.8%;
+  }
+
+  .dark {
+    --background: 240 10% 4%;
+    --card: 240 8% 8%;
+    --text: 0 0% 98%;
+    --muted: 240 5% 15%;
+    --border: 240 5% 20%;
+    --primary: 238 80% 65%;
+    --primary-hover: 238 80% 70%;
+    --success: 142.1 70.6% 45.3%;
+    --danger: 346.8 77.2% 49.8%;
+  }
+}
+
+@layer base {
+  body {
+    @apply bg-background text-text antialiased transition-colors duration-300;
+  }
+}
