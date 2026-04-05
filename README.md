@@ -1,8 +1,8 @@
-💰 Finance Dashboard UI
+ Finance Dashboard UI
 
-🔗 You can see the Finance Dashboard UI in action here: https://kavya-finance-dashboard.netlify.app/
+ You can see the Finance Dashboard UI in action here: https://kavya-finance-dashboard.netlify.app/
 
-📁 The code for the Finance Dashboard UI is available in this repository: https://github.com/Kavyasrivenna/finance-dashboard
+ The code for the Finance Dashboard UI is available in this repository: https://github.com/Kavyasrivenna/finance-dashboard
 
 📌 What is the Finance Dashboard UI
 
