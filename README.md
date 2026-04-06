@@ -1,105 +1,111 @@
- Finance Dashboard UI
+💰 Finance Dashboard UI
 
-🔗 Live Demo: https://kavya-finance-dashboard.netlify.app/
-📂 GitHub Repo: https://github.com/Kavyasrivenna/finance-dashboard
+A modern, responsive finance dashboard built with React + TypeScript to visualize financial data, manage transactions, and gain insights.
 
-📌 Overview
+---
 
-The Finance Dashboard UI is a modern, responsive frontend application designed to help users visualize financial data, manage transactions, and gain insights.
-This project demonstrates strong frontend engineering skills using a scalable architecture, clean UI design, and interactive data visualization.
+ 🔗 Links
 
-🚀 Tech Stack
+🌐Live Demo: https://kavya-finance-dashboard.netlify.app/
+📦 GitHub Repo: https://github.com/Kavyasrivenna/finance-dashboard
 
-🧩Core Technologies
-*React (with TypeScript)
-*Vite
-🗂 State Management
-*Zustand
-🎨 Styling & UI
-*Tailwind CSS
-*Framer Motion (animations)
-*Lucide React (icons)
-📊 Data Visualization
-*Chart.js
-*react-chartjs-2
-⚙️ Utilities
-*date-fns
-*clsx
-*tailwind-merge
+---
 
 ✨ Features
 
-📊 Dashboard Overview
-Total Balance, Income, Expenses
-Time-based trends chart
-Category-wise spending breakdown
-💳 Transactions Section
-View transactions (Date, Amount, Category, Type)
-🔍 Search transactions
-↕️ Sort transactions
-🎯 Filter transactions
-✏️ Add/Edit (Admin only)
-👥 Role-Based Access
-Viewer → Read-only access
-Admin → Full control (add/edit transactions)
-Toggle between roles dynamically
-📈 Insights
-Highest spending category
-Financial summaries
-Simple data-driven observations
-⚙️ State Management (Zustand)
-Transactions data
-Filters & search state
-Role management
-🎨 UI/UX Highlights
-Minimal & clean design
-Fully responsive (mobile + desktop)
-Smooth animations (Framer Motion)
-Handles empty states gracefully
+📊 Dashboard overview (Total Balance, Income, Expenses)
+📋 Transaction table (Date, Amount, Category, Type)
+🔍 Search & filter transactions
+📅 Date-based filtering
+➕ Add / ✏️ Edit / 🗑 Delete transactions (Admin)
+🌗 Dark / Light mode
+📱 Fully responsive design
 
-🧠 Architecture
-The project follows a modular and scalable structure:
+---
+
+🛠 Tech Stack
+
+Frontend
+
+* React (TypeScript)
+* Vite
+
+State Management
+
+* Zustand
+
+Styling
+
+* Tailwind CSS
+* Framer Motion
+
+Libraries
+
+* Lucide Icons
+* date-fns
+* recharts
+
+---
+
+📁 Project Structure
+
+```
 finance-dashboard/
-│
 ├── src/
-│   ├── components/   # UI components
-│   ├── store/        # Zustand state logic
-│   ├── utils/        # Helper functions
-│   ├── types/        # TypeScript types
-│   └── App.tsx
-│
+│   ├── components/
+│   ├── ui/
+│   ├── hooks/
+│   ├── store/
+│   ├── types/
+│   ├── App.tsx
+│   └── main.tsx
 ├── public/
 └── package.json
+```
 
-Screenshots
 
-Dashboard View
-Transactions Table
-Insights Section
-Admin Mode
 
-⚡ Getting Started
-# Clone the repository
+ 🚀 Getting Started
+
+ 1. Clone the repo
+
 git clone https://github.com/Kavyasrivenna/finance-dashboard.git
-
-# Navigate into the project
 cd finance-dashboard
 
-# Install dependencies
+
+2. Install dependencies
+
 npm install
 
-# Run the app
+
+3. Run the app
+   
 npm run dev
 
-# Build for production
+
+4. Build for production
+
 npm run build
 
-🔮 Future Improvements
-🔐 Authentication system
-🌐 Backend integration
-💾 Persistent data storage
-📊 Advanced analytics & reports
 
-👩‍💻 Author
+📸 Screenshots
+
+*Add your project screenshots here*
+
+---
+
+ 🔮 Future Improvements
+
+🔐 Authentication system
+☁️ Backend integration
+📊 Advanced analytics
+💾 Persistent storage
+
+---
+
+## 👩‍💻 Author
+
 Kavya Sri
-🔗 GitHub: https://github.com/Kavyasrivenna
+GitHub: https://github.com/Kavyasrivenna
+
+---
