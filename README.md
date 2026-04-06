@@ -1,259 +1,111 @@
- Finance Dashboard UI
+💰 Finance Dashboard UI
 
- You can see the Finance Dashboard UI in action here: https://kavya-finance-dashboard.netlify.app/
+A modern, responsive finance dashboard built with React + TypeScript to visualize financial data, manage transactions, and gain insights.
 
- The code for the Finance Dashboard UI is available in this repository: https://github.com/Kavyasrivenna/finance-dashboard
+---
 
-📌 What is the Finance Dashboard UI
+ 🔗 Links
 
-The Finance Dashboard UI is an responsive user interface that helps you visualize financial data manage transactions and get insights.
+🌐Live Demo: https://kavya-finance-dashboard.netlify.app/
+📦 GitHub Repo: https://github.com/Kavyasrivenna/finance-dashboard
 
-This project is an example of strong frontend engineering skills, including
+---
 
-* Component-based architecture
+✨ Features
 
-* State management using Zustand
+📊 Dashboard overview (Total Balance, Income, Expenses)
+📋 Transaction table (Date, Amount, Category, Type)
+🔍 Search & filter transactions
+📅 Date-based filtering
+➕ Add / ✏️ Edit / 🗑 Delete transactions (Admin)
+🌗 Dark / Light mode
+📱 Fully responsive design
 
-* Interactive data visualization
+---
 
-* Clean and responsive UI design
+🛠 Tech Stack
 
-⚠️ Note that the Finance Dashboard UI is a frontend-only project that uses mock data so you do not need a backend to use it.
+Frontend
 
-🚀 Tech Stack
+* React (TypeScript)
+* Vite
 
-The core technologies used in the Finance Dashboard UI are
+State Management
 
-React with TypeScript
+* Zustand
 
-Vite
+Styling
 
-For state management the Finance Dashboard UI uses
+* Tailwind CSS
+* Framer Motion
 
-Zustand
+Libraries
 
-For styling and UI the Finance Dashboard UI uses
+* Lucide Icons
+* date-fns
+* recharts
 
-Tailwind CSS
+---
 
-Framer Motion
+📁 Project Structure
 
-Lucide React Icons
-
-For data visualization the Finance Dashboard UI uses
-
-Chart.js
-
-react-chartjs-2
-
-The Finance Dashboard UI also uses some utility libraries, including
-
-date-fns
-
-clsx
-
-tailwind-merge
-
-✨ Features of the Finance Dashboard UI
-
-The Finance Dashboard UI has a lot of features including
-
-📊 Dashboard Overview
-
-The Dashboard Overview has summary cards that show you
-
-* Total Balance
-
-* Income
-
-* Expenses
-
-* Time-based trends chart
-
-* Category-wise spending breakdown
-
-💳 Transactions Section
-
-The Transactions Section displays
-
-* Date
-
-* Amount
-
-* Category
-
-* Type, which can be either Income or Expense
-
-You can also
-
-* Search for transactions
-
-* Sort transactions
-
-* Filter transactions
-
-* Add or edit transactions if you have the Admin role
-
-👥 Role-Based UI
-
-The Finance Dashboard UI has a role-based UI, which means that different users have levels of access.
-
-The Viewer role has read-only access while the Admin role can add or edit transactions.
-
-You can switch between roles using a UI toggle.
-
-📈 Insights
-
-The Finance Dashboard UI also provides insights, including
-
-* The highest spending category
-
-* summaries
-
-* Simple data-driven observations
-
-⚙️ State Management
-
-The Finance Dashboard UI uses Zustand to manage state, including
-
-* Transactions data
-
-* Filters and search
-
-* Role selection
-
-🎨 UI & UX
-
-The Finance Dashboard UI has an minimal design that is fully responsive across devices.
-
-It also has animations using Framer Motion and handles empty or no data states gracefully.
-
-🧠 Architecture
-
-The Finance Dashboard UI has a modular component structure, including
-
-* Dashboard components
-
-* Transactions components
-
-* UI components
-
-It also separates concerns into
-
-* UI
-
-* State logic
-
-* Utilities
-
-📂 Project Structure
-
-The Finance Dashboard UI project has the following structure
-
+```
 finance-dashboard/
-
-│
-
 ├── src/
-
 │   ├── components/
-
+│   ├── ui/
+│   ├── hooks/
 │   ├── store/
-
-│   ├── utils/
-
 │   ├── types/
-
-│   └── App.tsx
-
-│
-
+│   ├── App.tsx
+│   └── main.tsx
 ├── public/
-
 └── package.json
+```
 
-🖼️ Screenshots
 
-You can add screenshots of the Finance Dashboard UI to your repository.
 
-This is an idea because it helps recruiters see what the project looks like.
+ 🚀 Getting Started
 
-You can add screenshots of the following
+ 1. Clone the repo
 
-* Dashboard
+git clone https://github.com/Kavyasrivenna/finance-dashboard.git
+cd finance-dashboard
 
-* Transactions
 
-*. Insights
+2. Install dependencies
 
-* Admin Mode
+npm install
 
-⚡ Getting Started
 
-To get started with the Finance Dashboard UI you can
+3. Run the app
+   
+npm run dev
 
-* Clone the repository using git clone https://github.com/Kavyasrivenna/finance-dashboard.git
 
-* Change into the finance-dashboard directory using cd finance-dashboard
+4. Build for production
 
-* Install dependencies using npm install
+npm run build
 
-* Run the project using npm run dev
 
-* Build for production using npm run build
+📸 Screenshots
 
-📊 Evaluation Criteria Covered
+*Add your project screenshots here*
 
-The Finance Dashboard UI covers the following evaluation criteria
+---
 
-* Design and Creativity
+ 🔮 Future Improvements
 
-* Responsiveness
+🔐 Authentication system
+☁️ Backend integration
+📊 Advanced analytics
+💾 Persistent storage
 
-* Functionality
+---
 
-* User Experience
-
-* Technical Quality
-
-* State Management
-
-* Documentation
-
-* Attention to Detail
-
-🚀 Why the Finance Dashboard UI Stands Out
-
-The Finance Dashboard UI stands out because it
-
-* Uses a tech stack, including React, TypeScript and Vite
-
-* Implements Zustand, for state management
-
-* Includes charts using Chart.js
-
-* Demonstrates role-based UI logic
-
-* Has an scalable architecture
-
-* Is a real-world finance dashboard use case
-
-👩‍💻 Author
-
-The Finance Dashboard UI was created by
+## 👩‍💻 Author
 
 Kavya Sri
+GitHub: https://github.com/Kavyasrivenna
 
-You can find more of my work on GitHub: https://github.com/Kavyasrivenna
-
-🔮 Future Improvements
-
-There are ways the Finance Dashboard UI could be improved in the future, including
-
-* Adding a backend integration
-
-* Implementing an authentication system
-
-* Adding data storage
-
-* Including advanced analytics
+---
