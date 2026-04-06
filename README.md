@@ -151,21 +151,34 @@ The project follows a **component-based architecture** using React.
 
 ## 📸 Screenshots
 
-> Add your screenshots here
+> <img width="1868" height="910" alt="image" src="https://github.com/user-attachments/assets/93730467-55ba-438a-b517-c848f17dca68" />
 
-Example:
+
 
 ### Dashboard View
+<img width="1875" height="915" alt="image" src="https://github.com/user-attachments/assets/f3aab544-08fb-45cf-86f9-8e3002371843" />
 
-![Dashboard](./screenshots/dashboard.png)
+<img width="1885" height="896" alt="image" src="https://github.com/user-attachments/assets/b230e83a-3210-4eae-828e-302fa628cdeb" />
+
+<img width="1885" height="912" alt="image" src="https://github.com/user-attachments/assets/832deeb7-66ab-4c29-8b4a-08ccc581ed5c" />
+
+
 
 ### Transactions Section
+<img width="1881" height="905" alt="image" src="https://github.com/user-attachments/assets/35c51aa8-406a-4d4d-9f32-c25359861294" />
 
-![Transactions](./screenshots/transactions.png)
+<img width="1827" height="456" alt="image" src="https://github.com/user-attachments/assets/6ce40641-03f6-48d6-adcd-1315a794594f" />
+
+<img width="1880" height="911" alt="image" src="https://github.com/user-attachments/assets/036989c4-7c4d-409e-a72c-a8368dca38e7" />
+
+<img width="1879" height="908" alt="image" src="https://github.com/user-attachments/assets/2dc2f9f8-f205-46ec-ae8f-afd63823c1d3" />
+
+
 
 ### Insights Section
 
-![Insights](./screenshots/insights.png)
+<img width="1877" height="906" alt="image" src="https://github.com/user-attachments/assets/b0a4ddbf-e825-4896-bef4-c13393188670" />
+
 
 ---
 
