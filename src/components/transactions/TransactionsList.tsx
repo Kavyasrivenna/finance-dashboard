@@ -18,6 +18,9 @@ export const TransactionsList = () => {
   const [search, setSearch] = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState('');
   const [filterType, setFilterType] = useState('All');
+  const [fromDate, setFromDate] = useState('');
+  const [toDate, setToDate] = useState('');
+  const [showFilters, setShowFilters] = useState(false);
 
   const [sortBy, setSortBy] = useState<'date' | 'amount'>('date');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
@@ -31,6 +34,27 @@ export const TransactionsList = () => {
     }, 300);
     return () => clearTimeout(timer);
   }, [search]);
+
+  const parseDate = (dateStr: string) => {
+    if (!dateStr) return null;
+    if (dateStr.includes('-')) {
+      const parts = dateStr.split('-');
+      if (parts[0].length === 4) {
+        return new Date(dateStr);
+      } else {
+        const [day, month, year] = parts;
+        return new Date(Number(year), Number(month) - 1, Number(day));
+      }
+    }
+    return null;
+  };
+
+  const handleReset = () => {
+    setSearch('');
+    setFilterType('All');
+    setFromDate('');
+    setToDate('');
+  };
 
   const handleExportCSV = () => {
     if (!transactions.length) return;
@@ -70,11 +94,7 @@ export const TransactionsList = () => {
     let result = transactions.map(t => {
       const d = new Date(t.date);
       const updatedDate = new Date(2025, d.getMonth(), d.getDate());
-
-      return {
-        ...t,
-        updatedDate
-      };
+      return { ...t, updatedDate };
     });
 
     result = result.filter(t => {
@@ -90,7 +110,20 @@ export const TransactionsList = () => {
       const matchesType =
         filterType === 'All' || t.type === filterType;
 
-      return matchesSearch && matchesType;
+      const from = parseDate(fromDate);
+      const to = parseDate(toDate);
+
+      let matchesDateRange = true;
+
+      if (from && !isNaN(from.getTime())) {
+        matchesDateRange = t.updatedDate >= from;
+      }
+
+      if (to && !isNaN(to.getTime())) {
+        matchesDateRange = matchesDateRange && t.updatedDate <= to;
+      }
+
+      return matchesSearch && matchesType && matchesDateRange;
     });
 
     result = [...result].sort((a, b) => {
@@ -110,7 +143,7 @@ export const TransactionsList = () => {
     });
 
     return result;
-  }, [transactions, debouncedSearch, filterType, sortBy, sortOrder]);
+  }, [transactions, debouncedSearch, filterType, fromDate, toDate, sortBy, sortOrder]);
 
   const toggleSort = (field: 'date' | 'amount') => {
     setSortBy(field);
@@ -135,6 +168,14 @@ export const TransactionsList = () => {
         <CardTitle>Recent Transactions</CardTitle>
 
         <div className="flex gap-2">
+
+          <Button
+            variant="outline"
+            onClick={() => setShowFilters(prev => !prev)}
+          >
+            Filter
+          </Button>
+
           <Button variant="secondary" onClick={handleExportCSV}>
             Export CSV
           </Button>
@@ -161,16 +202,45 @@ export const TransactionsList = () => {
             />
           </div>
 
-          <Select
-            className="md:w-[160px]"
-            value={filterType}
-            onChange={(e) => setFilterType(e.target.value)}
-            options={[
-              { label: 'All Types', value: 'All' },
-              { label: 'Income', value: 'Income' },
-              { label: 'Expense', value: 'Expense' }
-            ]}
-          />
+          <AnimatePresence>
+            {showFilters && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                exit={{ opacity: 0, height: 0 }}
+                className="flex gap-4 flex-wrap"
+              >
+                <Select
+                  className="md:w-[160px]"
+                  value={filterType}
+                  onChange={(e) => setFilterType(e.target.value)}
+                  options={[
+                    { label: 'All Types', value: 'All' },
+                    { label: 'Income', value: 'Income' },
+                    { label: 'Expense', value: 'Expense' }
+                  ]}
+                />
+
+                <Input
+                  value={fromDate}
+                  onChange={(e) => setFromDate(e.target.value)}
+                  placeholder="From Date"
+                  className="md:w-[150px]"
+                />
+
+                <Input
+                  value={toDate}
+                  onChange={(e) => setToDate(e.target.value)}
+                  placeholder="To Date"
+                  className="md:w-[150px]"
+                />
+
+                <Button variant="destructive" onClick={handleReset}>
+                  Reset
+                </Button>
+              </motion.div>
+            )}
+          </AnimatePresence>
 
         </div>
 
